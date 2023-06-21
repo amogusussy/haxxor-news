@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Haxxor News</title>
+    <link href={{ url_for('static', filename='css/style.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/index.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/header.css') }} rel="stylesheet">
+  </head>
+  <body>
+    <div id="header">
+      <a href="/">Haxxor News</a>
+      | <a href="/ask">Ask</a>
+      | <a href="/newest">New</a>
+      | <a href="/front">Past</a>
+      | <a href="/show">Show</a>
+    </div>
+    <div class="content">
+      <div id="posts">
+        {% for post in posts %}
+        <div class="post">
+          <div class="title_line">
+            <span class="rank"> {{ post["rank"] }} </span>
+            <a href="{{ post["link"] }}" class="title">{{ post["title"] }}</a>
+            {% if post["site"] != "" %}
+              <a href="/from?site={{ post["site"] }}" class="src_site"> ({{ post["site"] }}) </a>
+            {% endif %}
+            <a class="proxy" href="/proxy?id={{ post["id"] }}">(Proxy)</a>
+          </div>
+          <div class="subline" ind="{{ post["rank_len"] }}">
+            <span class="points"> {{ post["score"] }} </span>
+            <a href="/user?id={{ post["user_name"] }}" class="user"> {{ post["user_name"] }} </a>
+            <span class="date"> {{ post["age"] }} </span>
+            <a href="/item?id={{ post["id"]}}" class="num_of_coments"> {{ post["comments"] }} </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <a href="{{ next_page }}"> Next Page -> </a>
+    </div>
+  </body>
+</html>

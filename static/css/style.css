@@ -1,0 +1,47 @@
+:root {
+	--main-bg: #1a1b26;
+	--main-fg: #c0caf5;
+	--border: #24283b;
+	--second-bg: #161620;
+	--grey: #565f89;
+	--placeholder: #c0caf578;
+
+	--purple: #bb9af7;
+	--red: #f7768e;
+	--orange: #ff9e64;
+	--yellow: #e0af68;
+	--green: #9ece6a;
+	--blue: #7aa2f7;
+	--turquoise: #2ac3de;
+	--light-blue: #73daca;
+
+  --link: #7aa2f7;
+  --indentStep: 12px;
+}
+
+body {
+  background: var(--main-bg);
+  color: var(--main-fg);
+  margin: auto;
+  max-width: 1000px;
+  padding: 0px 10px;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.content {
+  background: var(--second-bg);
+  padding: 10px;
+}
+
+.content {
+  background: var(--second-bg);
+  padding: 10px;
+}

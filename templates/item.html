@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title> {{ content["title"] }} </title>
+    <link href={{ url_for('static', filename='css/style.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/post.css') }} rel="stylesheet">
+    <link href={{ url_for('static', filename='css/header.css') }} rel="stylesheet">
+  </head>
+  <body>
+    <div id="header">
+      <a href="/">Haxxor News</a>
+      | <a href="/ask">Ask</a>
+      | <a href="/newest">New</a>
+      | <a href="/front">Past</a>
+      | <a href="/show">Show</a>
+    </div>
+    <div class="content">
+      <div id="mainPost">
+        <h1><a href="{{ content["link"]}}">{{ content["title"] }}</a></h1>
+        {% if content["site"] != "" %}
+          <a href=" {{ content["site_from"] }} " class="from_site">({{ content["site"] }})</a>
+          <a href="/proxy?id={{ content["id"] }} " class="proxy_link">(proxy)</a>
+        {% endif %}
+        <div class="subText">
+          <span class="points">{{ content["points"] }}</span>
+          | 
+          <a href="/user?id={{ content["op"] }}">{{ content["op"] }}</a>
+          |
+          <a href="/item?id={{ content["id"] }}">{{ content["comment_num"] }}</a>
+        </div>
+      </div>
+
+      <div id="comments">
+      {% for comment in content["comments"] %}
+        <div class="comment" style="margin-left: calc(var(--indentStep) * {{ comment["indent"] }});">
+          <div class="comhead">
+            <a class="user" href="{{ comment["user_href"] }}">
+              {{ comment["user"] }}
+            </a>
+            <span class="date">
+              {{ comment["date"] }}
+            </span>
+          </div>
+          <div class="commentText">
+            {{ comment["text"]|safe }}
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+      <!-- <a href=" {{ next_page }} " class="next">Next Page -> </a> -->
+    </div>
+  </body>
+</html>

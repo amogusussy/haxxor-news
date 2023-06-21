@@ -1,0 +1,9 @@
+#header {
+  background: var(--orange);
+  color: var(--main-bg);
+  font-weight: bold;
+}
+
+#header a {
+  color: var(--main-bg);
+}

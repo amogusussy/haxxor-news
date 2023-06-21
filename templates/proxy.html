@@ -1,0 +1,16 @@
+<html lang="en">
+  <head>
+    <title>Haxxor News</title>
+    <link href={{ url_for('static', filename='css/style.css') }} rel="stylesheet">
+    <style>
+      img {
+        max-width: 100%;
+        object-fit: contain;
+        height: fit-content;
+      }
+    </style>
+  </head>
+  <body>
+    {{ content|safe }}
+  </body>
+</html>
