@@ -3,11 +3,13 @@ import requests
 from utils._config import HEADERS
 from bs4 import BeautifulSoup
 
+
 def is_num(n):
     for i in n:
         if i not in "1234567890":
             return False
     return True
+
 
 def next_page(current, url):
     try:
@@ -21,10 +23,12 @@ def next_page(current, url):
     else:
         return url + f"?p={end}"
 
+
 def elem_exists(element):
     if element is not None:
         return element.get_text()
     return ""
+
 
 def get_results(type, page, day="ignore_me", site="ignore_me"):
     URL = f"https://news.ycombinator.com/{type}?p={page}"
@@ -37,15 +41,16 @@ def get_results(type, page, day="ignore_me", site="ignore_me"):
     html = requests.get(url=URL, headers=HEADERS).content.decode()
     parsed_html = BeautifulSoup(html, "html.parser")
     content = parsed_html.find_all("tr")[4:94]
-    # Range of <tr>s that are relevant to the posts. Length == 90, since each page
-    # has 30 posts, each one having a title, subline, and a spacer.
+    # Range of <tr>s that are relevant to the posts. Length == 90, since each
+    # page has 30 posts, each one having a title, subline, and a spacer.
 
     list_of_posts = []
     n = []
 
     for con in content:
         # Splits array based on if it's a spacer or not.
-        if str(con).strip() == "<tr class=\"spacer\" style=\"height:5px\"></tr>":
+        con = con.strip()
+        if con == "<tr class=\"spacer\" style=\"height:5px\"></tr>":
             list_of_posts.append(n)
             n = []
         else:
@@ -93,7 +98,9 @@ def get_comments(parsed_html):
             user = comment.find("a", class_="hnuser").get_text()
             user_href = f"/user?id={user}"
             date = comment.find("span", class_="age").get_text()
-            comment_text = comment.find("span", class_="commtext").prettify().replace(" c00", "")
+            comment_text = comment.find(
+                "span", class_="commtext"
+            ).prettify().replace(" c00", "")
             indent = comment.find("td", class_="ind")["indent"]
 
             comments.append({
@@ -146,6 +153,7 @@ def get_post_content(id):
         "site": site,
         "comments": comments,
     }
+
 
 def get_user_comments(user):
     URL = f"https://news.ycombinator.com/threads?id={user}"

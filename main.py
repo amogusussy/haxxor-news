@@ -17,6 +17,7 @@ def home():
         next_page=helpers.next_page(page_num, request.path)
     )
 
+
 @app.route("/front")
 def front():
     page_num = helpers.get_page_num(request)
@@ -32,6 +33,7 @@ def front():
         next_page=helpers.next_page(page_num, request.path)
     )
 
+
 @app.route("/ask")
 def ask():
     page_num = helpers.get_page_num(request)
@@ -41,6 +43,7 @@ def ask():
         posts=helpers.get_results("ask", page_num),
         next_page=helpers.next_page(page_num, request.path)
     )
+
 
 @app.route("/newest")
 def new():
@@ -52,6 +55,7 @@ def new():
         next_page=helpers.next_page(page_num, request.path)
     )
 
+
 @app.route("/show")
 def show():
     page_num = helpers.get_page_num(request)
@@ -61,6 +65,7 @@ def show():
         posts=helpers.get_results("show", page_num),
         next_page=helpers.next_page(page_num, request.path)
     )
+
 
 @app.route("/from")
 def from_site():
@@ -76,6 +81,7 @@ def from_site():
         posts=helpers.get_results("from", page_num, site=site),
         next_page=helpers.next_page(page_num, request.path)
     )
+
 
 @app.route("/item")
 def item():
@@ -94,12 +100,14 @@ def threads():
 
     return "TODO"
 
+
 @app.route("/proxy")
 def _proxy():
     return render_template(
         "proxy.html",
         content=proxy.proxy_post(helpers.valid_id(request))
     )
+
 
 @app.route("/proxy_image")
 def _proxy_image():
