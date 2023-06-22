@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from datetime import datetime
 from flask import Flask, request, render_template
 from utils._config import PORT
