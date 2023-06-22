@@ -1,13 +1,11 @@
-import string
 import re
 import requests
 from utils._config import HEADERS
 from bs4 import BeautifulSoup
-from urllib.parse import quote
 
 def is_num(n):
     for i in n:
-        if i not in string.digits:
+        if i not in "1234567890":
             return False
     return True
 
@@ -22,6 +20,11 @@ def next_page(current, url):
         return url + f"&p={end}"
     else:
         return url + f"?p={end}"
+
+def elem_exists(element):
+    if element is not None:
+        return element.get_text()
+    return ""
 
 def get_results(type, page, day="ignore_me", site="ignore_me"):
     URL = f"https://news.ycombinator.com/{type}?p={page}"
@@ -56,26 +59,11 @@ def get_results(type, page, day="ignore_me", site="ignore_me"):
         title_line = post[0].select(".titleline a")[0]
         title = title_line.get_text()
         link = title_line["href"]
-        site = post[0].find("span", class_="sitestr")
-
-        if site != None:
-            site = site.get_text()
-        else:
-            site = ""
-
-        score = post[1].find("span", "score")
-        if score != None:
-            score = score.get_text()
-        else:
-            score = ""
-        user_name = post[1].find("a", class_="hnuser")
-        if user_name != None:
-            user_name = user_name.get_text()
-        else:
-            user_name = ""
+        site = elem_exists(post[0].find("span", class_="sitestr"))
+        score = elem_exists(post[1].find("span", "score"))
+        user_name = elem_exists(post[1].find("a", class_="hnuser"))
         age = post[1].select(".age")[0].get_text()
         comments = post[1].select(".subline a")
-
         if comments != []:
             comments = comments[-1].get_text()
         else:
@@ -115,10 +103,10 @@ def get_comments(parsed_html):
                 "text": comment_text,
                 "indent": indent,
             })
-        if parsed_html.find("a", class_=".morelink") == None:
+        if parsed_html.find("a", class_=".morelink") is None:
             break
         else:
-            URL = f"https://news.ycombinator.com/item?id={quote(id)}&p={i}"
+            URL = f"https://news.ycombinator.com/item?id={id}&p={i}"
             html = requests.get(url=URL, headers=HEADERS).content
             parsed_html = BeautifulSoup(html, "html.parser")
             i += 1
@@ -126,18 +114,19 @@ def get_comments(parsed_html):
 
 
 def get_post_content(id):
-    URL = f"https://news.ycombinator.com/item?id={quote(id)}"
+
+    if id == "1":
+        return "Invalid ID :("
+
+    URL = f"https://news.ycombinator.com/item?id={id}"
     html = requests.get(url=URL, headers=HEADERS).content
     parsed_html = BeautifulSoup(html, "html.parser")
 
     title = parsed_html.select(".titleline a")[0]
     link = title["href"]
     title = title.get_text()
-    site = parsed_html.find("span", class_="sitestr")
-    if site != None:
-        site = site.get_text()
-    else:
-        site = ""
+    site = elem_exists(parsed_html.find("span", class_="sitestr"))
+
     site_from = f"from?site={site}"
     points = parsed_html.select(".score")[0].get_text()
     points = parsed_html.find("span", class_="score").get_text()
@@ -168,10 +157,14 @@ def get_user_comments(user):
 
 def valid_id(request):
     if "id" in request.args:
-        id = re.search("[0-9]{1,9}", request.args.get("id"))[0]
+        id = re.search("[0-9]{1,9}", request.args.get("id"))
     else:
-        id = "1"
-    return id
+        return "1"
+    if id is not None:
+        id = id[0]
+    else:
+        return "1"
+
 
 def get_page_num(request):
     if "p" in request.args:

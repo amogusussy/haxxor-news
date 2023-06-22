@@ -79,10 +79,14 @@ def from_site():
 
 @app.route("/item")
 def item():
+    id = helpers.valid_id(request)
+    if id == "1":
+        return "ERROR with ID."
+
     return render_template(
         "item.html",
-        content=helpers.get_post_content(helpers.valid_id(request))
-    )
+        content=helpers.get_post_content(id))
+
 
 @app.route("/threads")
 def threads():
