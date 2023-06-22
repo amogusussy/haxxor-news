@@ -1,18 +1,17 @@
 from readabilipy import simple_json_from_html_string
 import requests
 from bs4 import BeautifulSoup
-from utils import _config
 
 def proxy_post(id):
     URL = f"https://news.ycombinator.com/item?id={id}"
     html = requests.get(URL).content.decode()
-    
+
     parsed_html = BeautifulSoup(html, "html.parser")
 
     article_url = parsed_html.select_one(".title a")["href"]
 
     article_html = requests.get(
-        url=article_url, 
+        url=article_url,
         headers={
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; rv:113.0) Gecko/20100101 Firefox/113.0",
             "Accept": "text/html"
