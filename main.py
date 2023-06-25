@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-from datetime import datetime
-from flask import Flask, request, render_template
-from utils._config import PORT
-from utils import helpers, proxy
+from flask import (
+    Flask,
+    request,
+    render_template
+)
+from utils import (
+    config,
+    helpers,
+    proxy
+)
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -25,7 +31,7 @@ def front():
     if "day" in request.args:
         day = request.args.get("day", "")
     else:
-        day = datetime.now().strftime("%Y-%m-%d")
+        day = helpers.get_date()
 
     return render_template(
         "index.html",
@@ -117,4 +123,4 @@ def _proxy_image():
 
 
 if __name__ == "__main__":
-    app.run(threaded=True, port=PORT)
+    app.run(threaded=True, port=config.PORT)

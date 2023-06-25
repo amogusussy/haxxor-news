@@ -1,6 +1,7 @@
 import re
+from datetime import datetime
 import requests
-from utils._config import HEADERS
+from utils.config import HEADERS
 from bs4 import BeautifulSoup
 
 
@@ -49,8 +50,7 @@ def get_results(type, page, day="ignore_me", site="ignore_me"):
 
     for con in content:
         # Splits array based on if it's a spacer or not.
-        con = con.strip()
-        if con == "<tr class=\"spacer\" style=\"height:5px\"></tr>":
+        if str(con) == "<tr class=\"spacer\" style=\"height:5px\"></tr>":
             list_of_posts.append(n)
             n = []
         else:
@@ -69,7 +69,7 @@ def get_results(type, page, day="ignore_me", site="ignore_me"):
         user_name = elem_exists(post[1].find("a", class_="hnuser"))
         age = post[1].select(".age")[0].get_text()
         comments = post[1].select(".subline a")
-        if comments != []:
+        if len(comments) != 0:
             comments = comments[-1].get_text()
         else:
             comments = ""
@@ -98,9 +98,11 @@ def get_comments(parsed_html):
             user = comment.find("a", class_="hnuser").get_text()
             user_href = f"/user?id={user}"
             date = comment.find("span", class_="age").get_text()
+
             comment_text = comment.find(
                 "span", class_="commtext"
             ).prettify().replace(" c00", "")
+
             indent = comment.find("td", class_="ind")["indent"]
 
             comments.append({
@@ -172,6 +174,7 @@ def valid_id(request):
         id = id[0]
     else:
         return "1"
+    return id
 
 
 def get_page_num(request):
@@ -180,3 +183,7 @@ def get_page_num(request):
     else:
         page_num = "1"
     return page_num
+
+
+def get_date():
+    return datetime.now().strftime("%Y-%m-%d")
