@@ -1,6 +1,6 @@
-from utils.config import HEADERS
-from readabilipy import simple_json_from_html_string
 import requests
+from utils.config import HEADERS, IMG_HEADERS
+from readabilipy import simple_json_from_html_string
 from bs4 import BeautifulSoup
 
 
@@ -35,7 +35,7 @@ def proxy_post(id):
 def proxy_image(url):
     image = requests.get(
         url=url,
-        headers=HEADERS
+        headers=IMG_HEADERS
     ).content
 
     return image

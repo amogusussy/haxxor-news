@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from flask import (
     Flask,
+    Response,
     request,
     render_template
 )
@@ -119,7 +120,9 @@ def _proxy():
 def _proxy_image():
     if "url" in request.args:
         url = request.args.get("url")
-        return proxy.proxy_image(url)
+        resp = Response(proxy.proxy_image(url))
+        resp.headers["Content-Type"] = "image/*"
+        return resp
 
 
 if __name__ == "__main__":
