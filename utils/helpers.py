@@ -31,12 +31,12 @@ def elem_exists(element):
     return ""
 
 
-def get_results(type, page, day="ignore_me", site="ignore_me"):
+def get_results(type, page, day=None, site=None):
     URL = f"https://news.ycombinator.com/{type}?p={page}"
 
-    if day != "ignore_me":
+    if day is not None:
         URL += f"&day={day}"
-    if site != "ignore_me":
+    if site is not None:
         URL += f"&site={site}"
 
     html = requests.get(url=URL, headers=HEADERS).content.decode()
